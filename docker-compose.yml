@@ -1,0 +1,26 @@
+services:
+  youtube:
+    build:
+      context: .
+    image: youtube
+    env_file:
+      - ${ENV_FILE:-.env}
+    expose:
+      - "${PORT:-3000}"
+    networks:
+      - web_network
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          node -e "fetch('http://127.0.0.1:' + process.env.PORT + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  web_network:
+    external: true
+    name: ${WEB_NETWORK:-web_network}
