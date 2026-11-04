@@ -3,10 +3,8 @@ services:
     build:
       context: .
     image: youtube
-    env_file:
-      - ${ENV_FILE:-.env}
     expose:
-      - "${PORT:-3000}"
+      - "3000"
     networks:
       - web_network
     restart: unless-stopped
@@ -14,7 +12,7 @@ services:
       test:
         - CMD-SHELL
         - >-
-          node -e "fetch('http://127.0.0.1:' + process.env.PORT + '/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+          node -e "fetch('http://127.0.0.1:3000/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
       interval: 30s
       timeout: 5s
       retries: 3
@@ -23,4 +21,4 @@ services:
 networks:
   web_network:
     external: true
-    name: ${WEB_NETWORK:-web_network}
+    name: web_network
