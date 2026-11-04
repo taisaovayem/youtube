@@ -15,7 +15,7 @@ describe('AudioController', () => {
     },
   };
 
-  it('returns a local playback URL without exposing the direct stream URL', async () => {
+  it('returns the resolved direct stream URL so playback does not resolve it again', async () => {
     const controller = new AudioController(resolver);
 
     await expect(
@@ -23,7 +23,7 @@ describe('AudioController', () => {
     ).resolves.toEqual({
       title: 'Test song',
       artworkUrl: 'https://i.ytimg.com/test.jpg',
-      audioUrl: '/api/audio?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DdQw4w9WgXcQ',
+      audioUrl: 'https://example.googlevideo.com/audio.m4a',
     });
   });
 

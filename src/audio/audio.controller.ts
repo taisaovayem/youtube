@@ -19,7 +19,7 @@ export class AudioController {
     return {
       title: audio.title,
       artworkUrl: audio.artworkUrl,
-      audioUrl: `/api/audio?url=${encodeURIComponent(url)}`,
+      audioUrl: audio.directAudioUrl,
     };
   }
 
