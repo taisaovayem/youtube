@@ -32,6 +32,7 @@ export class HomeController {
     <main>
       <form id="resolve-form">
         <input id="youtube-url" type="url" inputmode="url" placeholder="https://www.youtube.com/watch?v=…" aria-label="YouTube URL" required />
+        <button id="paste-from-clipboard" type="button">Dán</button>
         <button type="submit">Phát</button>
       </form>
       <section id="result" hidden>
@@ -48,8 +49,7 @@ export class HomeController {
       const audio = document.querySelector('#audio-player');
       const status = document.querySelector('#status');
 
-      form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+      async function resolveAudio() {
         status.textContent = '';
         try {
           const response = await fetch('/api/resolve?url=' + encodeURIComponent(input.value));
@@ -70,6 +70,16 @@ export class HomeController {
         } catch (error) {
           status.textContent = error instanceof Error ? error.message : 'Đã có lỗi xảy ra.';
         }
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        await resolveAudio();
+      });
+
+      document.querySelector('#paste-from-clipboard').addEventListener('click', async () => {
+        input.value = await navigator.clipboard.readText();
+        await resolveAudio();
       });
     </script>
   </body>
